@@ -1,0 +1,110 @@
+# HTML 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Weather App</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header>
+    <h1>Weather Forecast</h1>
+  </header>
+  <main>
+    <section id="input-section">
+      <input type="text" id="city" placeholder="Enter city name">
+      <button id="getWeather">Get Weather</button>
+    </section>
+    <section id="weather-section">
+      <div id="weather-data"></div>
+    </section>
+  </main>
+  <footer>
+    <p>&copy; 2025 Weather App</p>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
+# CSS
+/* styles.css */
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+}
+
+main {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+#input-section {
+  margin-bottom: 20px;
+}
+
+#city {
+  padding: 10px;
+  font-size: 1em;
+}
+
+button {
+  padding: 10px 15px;
+  font-size: 1em;
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}
+
+#weather-data {
+  text-align: center;
+  margin-top: 20px;
+}
+
+footer {
+  background-color: #4CAF50;
+  color: white;
+  text-align: center;
+  padding: 1em 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+}
+# JAVASCRIPT
+// script.js
+document.getElementById("getWeather").addEventListener("click", async () => {
+  const city = document.getElementById("city").value;
+  const apiKey = "YOUR_API_KEY"; // Replace with your OpenWeatherMap API key
+  const url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
+
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("City not found");
+    const data = await response.json();
+
+    const weatherInfo = `
+      <h2>Weather in ${data.name}</h2>
+      <p><strong>Temperature:</strong> ${data.main.temp}°C</p>
+      <p><strong>Humidity:</strong> ${data.main.humidity}%</p>
+      <p><strong>Conditions:</strong> ${data.weather[0].description}</p>
+    `;
+    document.getElementById("weather-data").innerHTML = weatherInfo;
+  } catch (error) {
+    document.getElementById("weather-data").innerHTML = `<p style="color: red;">${error.message}</p>`;
+  }
+});
